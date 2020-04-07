@@ -1,0 +1,21 @@
+{
+    "name": "netsells/laravel-http-resources",
+    "description": "Laravel Resources supercharged",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Jakub Gawron",
+            "email": "jakub.gawron@netsells.co.uk"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "ext-json": "*",
+        "laravel/framework": "^5.0 || ^6.0 || ^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Netsells\\Http\\Resources\\": "src/"
+        }
+    }
+}
