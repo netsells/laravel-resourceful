@@ -128,27 +128,46 @@ trait ResolvesResources
         return $childResourceHandlers;
     }
 
-    protected function resolveChildResources($request, array $childResourceHandlers)
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param array $childResourceHandlers
+     */
+    protected function resolveChildResources($request, array $childResourceHandlers): void
     {
-        $deferredRelations = collect($childResourceHandlers)->flatMap(function (ChildResourceHandler $childResourceHandler) {
-            $childResource = $childResourceHandler->childResource;
-            if ($childResource instanceof ResourceCollection) {
-                return $childResource->collection;
-            } else {
-                return Collection::make([$childResource]);
-            }
-        })->filter(function (JsonResource $resource) {
-            return method_exists($resource, 'deferredRelations');
-        })->map(function (JsonResource $resource) use ($request) {
-            return Arr::wrap($resource->deferredRelations($request));
-        })->flatten();
+        $resources = collect($childResourceHandlers)
+            ->flatMap(function (ChildResourceHandler $childResourceHandler) {
+                $childResource = $childResourceHandler->childResource;
+                if ($childResource instanceof ResourceCollection) {
+                    return $childResource->collection;
+                } else {
+                    return Collection::make([$childResource]);
+                }
+            });
 
-        if (!$deferredRelations->isEmpty()) {
-            $this->resolveDeferredValues($deferredRelations->toArray());
-        }
+        $this->collectAndResolvePreloads($request, $resources);
 
         collect($childResourceHandlers)->each(function (ChildResourceHandler $childResourceHandler) use ($request) {
             ($childResourceHandler->resolver)($request);
         });
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param Collection $resources
+     * @return Collection
+     */
+    protected function collectAndResolvePreloads($request, Collection $resources): Collection
+    {
+        $preloads = $resources->filter(function (JsonResource $resource) {
+            return method_exists($resource, 'preloads');
+        })->map(function (JsonResource $resource) use ($request) {
+            return Arr::wrap($resource->preloads($request));
+        })->flatten();
+
+        if (!$preloads->isEmpty()) {
+            $this->resolveDeferredValues($preloads->toArray());
+        }
+
+        return $preloads;
     }
 }

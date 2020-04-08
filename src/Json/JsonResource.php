@@ -30,9 +30,18 @@ class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
      * @param callable|null $fn
      * @return DeferredValue
      */
-    protected function defer($relations, ?callable $fn = null): DeferredValue
+    protected function use($relations, ?callable $fn = null): DeferredValue
     {
         return new LoadMissingDeferredValue($this, (array) $relations, $fn);
+    }
+
+    /**
+     * @param string ...$relations
+     * @return DeferredValue
+     */
+    protected function preload(...$relations): DeferredValue
+    {
+        return new LoadMissingDeferredValue($this, $relations);
     }
 
     /**
@@ -42,7 +51,7 @@ class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
      */
     protected function many(string $relationship, string $resourceClass): DeferredValue
     {
-        return $this->defer($relationship, function ($model) use ($resourceClass) {
+        return $this->use($relationship, function ($model) use ($resourceClass) {
             return $resourceClass::collection($model);
         });
     }
@@ -54,7 +63,7 @@ class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
      */
     protected function one(string $relationship, string $resourceClass): DeferredValue
     {
-        return $this->defer($relationship, function ($model) use ($resourceClass) {
+        return $this->use($relationship, function ($model) use ($resourceClass) {
             return $resourceClass::make($model);
         });
     }
