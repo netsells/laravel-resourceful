@@ -17,19 +17,19 @@ abstract class TestCase extends BaseTestCase
     }
 
     /**
+     * @param array $queryLog
      * @param callable $fn
-     * @param int $queryCount
      * @return mixed
      */
-    protected function countingQueries(&$queryCount, callable $fn)
+    protected function withQueryLog(&$queryLog, callable $fn)
     {
         /** @var Connection $connection */
         $connection = $this->app->get(Connection::class);
         $connection->enableQueryLog();
         $connection->flushQueryLog();
 
-        return tap($fn(), function () use ($connection, &$queryCount) {
-            $queryCount = count($connection->getQueryLog());
+        return tap($fn(), function () use ($connection, &$queryLog) {
+            $queryLog = $connection->getQueryLog();
             $connection->disableQueryLog();
         });
     }
