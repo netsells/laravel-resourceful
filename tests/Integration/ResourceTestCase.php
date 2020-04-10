@@ -19,9 +19,10 @@ class ResourceTestCase extends TestCase
     public function testSuperMatchesBasicResource(string $modelClass, array $states, string $basicClass, string $superClass)
     {
         /** @var Model $model */
-        $model = factory($modelClass)->states($states)->create();
-
+        $model = $this->produce($modelClass, 1, $states);
         $basicResource = $basicClass::make($model)->response()->content();
+
+        $model = $model->fresh();
         $superResource = $superClass::make($model)->response()->content();
 
         $this->assertJsonStringEqualsJsonString($basicResource, $superResource);
@@ -37,9 +38,10 @@ class ResourceTestCase extends TestCase
     public function testSuperMatchesBasicResourceCollection(string $modelClass, array $states, string $basicClass, string $superClass)
     {
         /** @var Collection $models */
-        $models = factory($modelClass, 2)->states($states)->create();
-
+        $models = $this->produce($modelClass, 2, $states);
         $basicResource = $basicClass::collection($models)->response()->content();
+
+        $models = $models->fresh();
         $superResource = $superClass::collection($models)->response()->content();
 
         $this->assertJsonStringEqualsJsonString($basicResource, $superResource);
@@ -55,7 +57,7 @@ class ResourceTestCase extends TestCase
     public function testSuperReducesQueriesOverBasicResource(string $modelClass, array $states, string $basicClass, string $superClass)
     {
         /** @var Model $model */
-        $model = factory($modelClass)->states($states)->create();
+        $model = $this->produce($modelClass, 1, $states);
         $this->countingQueries($basicQueryCount, function () use ($basicClass, $model) {
             return $basicClass::make($model)->response()->content();
         });
@@ -81,7 +83,7 @@ class ResourceTestCase extends TestCase
     public function testSuperReducesQueriesOverBasicResourceCollection(string $modelClass, array $states, string $basicClass, string $superClass)
     {
         /** @var Collection $models */
-        $models = factory($modelClass, 2)->states($states)->create();
+        $models = $this->produce($modelClass, 2, $states);
         $this->countingQueries($basicQueryCount, function () use ($basicClass, $models) {
             return $basicClass::collection($models)->response()->content();
         });
@@ -95,5 +97,16 @@ class ResourceTestCase extends TestCase
             dump($basicQueryCount . ' >= ' . $superQueryCount);
         }
         $this->assertLessThanOrEqual($basicQueryCount, $superQueryCount);
+    }
+
+    /**
+     * @param string $modelClass
+     * @param int $amount
+     * @param array $states
+     * @return Collection|Model
+     */
+    protected function produce(string $modelClass, int $amount, array $states)
+    {
+        return factory($modelClass, $amount > 1 ? $amount : null)->states($states)->create();
     }
 }
