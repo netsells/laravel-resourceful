@@ -9,6 +9,9 @@ use Netsells\Http\Resources\Json\ResourceCollection;
 
 trait ResolvesResources
 {
+    /**
+     * @var bool
+     */
     protected $resolvingRoot = false;
 
     /**
@@ -31,11 +34,6 @@ trait ResolvesResources
      */
     public function resolve($request = null)
     {
-//        dump([
-//            'root' => $this->resolvingRoot,
-//            'resource' => $this->resourceClass(),
-//        ]);
-
         if ($this->resolvingRoot) {
             if (method_exists($this, 'beforeResolveRoot')) {
                 $this->beforeResolveRoot($request);
@@ -46,30 +44,25 @@ trait ResolvesResources
         return parent::resolve($request);
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param array $initiallyResolved
+     * @return array
+     */
     protected function resolveRoot($request, array $initiallyResolved): array
     {
         do {
-            //dump($initiallyResolved);
-
             $deferredValues = $this->collectDeferredValues($initiallyResolved);
-
-            //dump($deferredValues);
 
             if (!empty($deferredValues)) {
                 $this->resolveDeferredValues($deferredValues);
             }
 
-            //dump($initiallyResolved);
-
             $childResourceHandlers = $this->collectChildResourceHandlers($initiallyResolved);
-
-            //dump($childResourceHandlers);
 
             if (!empty($childResourceHandlers)) {
                 $this->resolveChildResources($request, $childResourceHandlers);
             }
-
-            //dump($initiallyResolved);
         } while (!empty($deferredValues) || !empty($childResourceHandlers));
 
         return $initiallyResolved;
@@ -98,7 +91,10 @@ trait ResolvesResources
         return $deferredValues;
     }
 
-    protected function resolveDeferredValues(array $deferredValues)
+    /**
+     * @param DeferredValue[] $deferredValues
+     */
+    protected function resolveDeferredValues(array $deferredValues): void
     {
         collect($deferredValues)->groupBy(function (DeferredValue $deferredValue) {
             return get_class($deferredValue);

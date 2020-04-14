@@ -2,6 +2,7 @@
 
 namespace Netsells\Http\Resources\Json;
 
+use Illuminate\Support\Collection;
 use Netsells\Http\Resources\DeferredValue;
 use Netsells\Http\Resources\LoadMissingDeferredValue;
 use Netsells\Http\Resources\ResolvesResources;
@@ -66,5 +67,10 @@ class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
         return $this->use($relationship, function ($model) use ($resourceClass) {
             return $resourceClass::make($model);
         });
+    }
+
+    protected function beforeResolveRoot($request)
+    {
+        $this->collectAndResolvePreloads($request, Collection::make([$this]));
     }
 }
