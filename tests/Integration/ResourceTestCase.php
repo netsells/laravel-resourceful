@@ -4,25 +4,12 @@ namespace Netsells\Http\Resources\Tests\Integration;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Faker\Generator as Faker;
 
 abstract class ResourceTestCase extends TestCase
 {
     protected $dumpsQueryCount = false;
     protected $dumpsJson = false;
     protected $collectionSize = 4;
-
-    /**
-     * @var Faker
-     */
-    protected $faker;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        $this->faker = $this->app->make(Faker::class);
-    }
 
     /**
      * @dataProvider resourceProvider
