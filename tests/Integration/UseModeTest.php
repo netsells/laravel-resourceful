@@ -2,93 +2,48 @@
 
 namespace Netsells\Http\Resources\Tests\Integration;
 
-use Netsells\Http\Resources\Json\JsonResource;
+use Akamon\MockeryCallableMock\MockeryCallableMock;
 use Netsells\Http\Resources\Tests\Integration\Database\Models\Book;
-
-/**
- * @mixin Book
- */
-class BookWithSingleRelation extends JsonResource {
-
-    protected $callback;
-
-    public function toArray($request)
-    {
-        return [
-            'author' => $this->use('author', $this->callback),
-        ];
-    }
-
-    public function withCallback(callable $callback): self
-    {
-        $this->callback = $callback;
-
-        return $this;
-    }
-}
-
-/**
- * @mixin Book
- */
-class BookWithMultiRelations extends JsonResource {
-
-    protected $callback;
-
-    public function toArray($request)
-    {
-        return [
-            'author_with_genres' => $this->use(['author', 'genres'], $this->callback),
-        ];
-    }
-
-    public function withCallback(callable $callback): self
-    {
-        $this->callback = $callback;
-
-        return $this;
-    }
-}
+use Netsells\Http\Resources\Tests\Integration\Resources\UseMode\BookWithMultiRelations;
+use Netsells\Http\Resources\Tests\Integration\Resources\UseMode\BookWithSingleRelation;
 
 class UseModeTest extends TestCase
 {
     public function testUseLoadsAndProvidesSingleRelation()
     {
-        $called = false;
-        $providedArgs = [];
-
         /** @var Book $book */
         $book = factory(Book::class)->with('author')->create()->fresh();
 
         BookWithSingleRelation::make($book)
-            ->withCallback(function () use (&$called, &$providedArgs) {
-                $called = true;
-                $providedArgs = func_get_args();
-            })
+            ->withCallback(
+                $this->toCallback(function ($author) use ($book) {
+                    return $author === $book->author;
+                })
+            )
             ->response();
-
-        $this->assertTrue($called);
-        $this->assertCount(1, $providedArgs);
-        $this->assertEquals($book->author, $providedArgs[0]);
     }
 
     public function testUseLoadsAndProvidesMultipleRelations()
     {
-        $called = false;
-        $providedArgs = [];
-
         /** @var Book $book */
         $book = factory(Book::class)->with('author')->create()->fresh();
 
         BookWithMultiRelations::make($book)
-            ->withCallback(function () use (&$called, &$providedArgs) {
-                $called = true;
-                $providedArgs = func_get_args();
-            })
+            ->withCallback(
+                $this->toCallback(function ($author, $genres) use ($book) {
+                    return $author === $book->author
+                        && $genres === $book->genres;
+                })
+            )
             ->response();
+    }
 
-        $this->assertTrue($called);
-        $this->assertCount(2, $providedArgs);
-        $this->assertEquals($book->author, $providedArgs[0]);
-        $this->assertEquals($book->genres, $providedArgs[1]);
+    protected function toCallback(callable $matcher): MockeryCallableMock
+    {
+        return tap(new MockeryCallableMock(), function (MockeryCallableMock $callback) use ($matcher) {
+            $callback->shouldBeCalled()
+                ->once()
+                ->withArgs($matcher);
+        });
     }
 }
