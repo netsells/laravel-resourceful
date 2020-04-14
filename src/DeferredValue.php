@@ -43,5 +43,5 @@ abstract class DeferredValue
     /**
      * @param static[] $deferredValues
      */
-    abstract static function resolve(array $deferredValues);
+    abstract public static function resolve(array $deferredValues);
 }

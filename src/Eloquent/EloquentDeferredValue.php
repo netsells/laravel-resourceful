@@ -1,19 +1,20 @@
 <?php
 
-namespace Netsells\Http\Resources;
+namespace Netsells\Http\Resources\Eloquent;
 
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Illuminate\Support\Collection;
+use Netsells\Http\Resources\DeferredValue;
 use Netsells\Http\Resources\Json\JsonResource;
 use Netsells\Http\Resources\Json\ResourceCollection;
 
-class LoadMissingDeferredValue extends DeferredValue
+abstract class EloquentDeferredValue extends DeferredValue
 {
-    /** @var string[] */
+    /**
+     * @var string[]
+     */
     public $relations;
 
     /**
-     * LoadMissingDeferredValue constructor.
+     * EloquentDeferredValue constructor.
      * @param JsonResource|ResourceCollection $resource
      * @param array $relations
      * @param callable|null $callback
@@ -27,19 +28,15 @@ class LoadMissingDeferredValue extends DeferredValue
     /**
      * @param static[] $deferredValues
      */
-    static function resolve(array $deferredValues)
+    public static function resolve(array $deferredValues)
     {
-        collect($deferredValues)->groupBy('relations')
-            ->each(function (Collection $collection, $relation) {
-                EloquentCollection::make($collection->pluck('resource.resource'))
-                    ->loadMissing($relation);
-            });
+        static::loadEloquentRelations($deferredValues);
 
         collect($deferredValues)
-            ->filter(function (LoadMissingDeferredValue $deferredValue) {
+            ->filter(function (EloquentDeferredValue $deferredValue) {
                 return $deferredValue->resolver;
             })
-            ->each(function (LoadMissingDeferredValue $deferredValue) {
+            ->each(function (EloquentDeferredValue $deferredValue) {
                 $relations = collect($deferredValue->relations)->map(function ($relation) use ($deferredValue) {
                     return $deferredValue->resource->$relation;
                 })->all();
@@ -47,4 +44,11 @@ class LoadMissingDeferredValue extends DeferredValue
                 ($deferredValue->resolver)(...$relations);
             });
     }
+
+    /**
+     * Begins eager loading eloquent model relations.
+     * @param static[] $deferredValues
+     * @return string
+     */
+    abstract protected static function loadEloquentRelations(array $deferredValues);
 }

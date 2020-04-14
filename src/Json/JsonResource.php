@@ -3,13 +3,12 @@
 namespace Netsells\Http\Resources\Json;
 
 use Illuminate\Support\Collection;
-use Netsells\Http\Resources\DeferredValue;
-use Netsells\Http\Resources\LoadMissingDeferredValue;
+use Netsells\Http\Resources\Eloquent\ResolvesEloquentResources;
 use Netsells\Http\Resources\ResolvesResources;
 
 class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
 {
-    use ResolvesResources;
+    use ResolvesResources, ResolvesEloquentResources;
 
     /**
      * Create new anonymous resource collection.
@@ -23,49 +22,6 @@ class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
             if (property_exists(static::class, 'preserveKeys')) {
                 $collection->preserveKeys = (new static([]))->preserveKeys === true;
             }
-        });
-    }
-
-    /**
-     * @param string|string[] $relations
-     * @param callable|null $fn
-     * @return DeferredValue
-     */
-    protected function use($relations, ?callable $fn = null): DeferredValue
-    {
-        return new LoadMissingDeferredValue($this, (array) $relations, $fn);
-    }
-
-    /**
-     * @param string ...$relations
-     * @return DeferredValue
-     */
-    protected function preload(...$relations): DeferredValue
-    {
-        return new LoadMissingDeferredValue($this, $relations);
-    }
-
-    /**
-     * @param string $relationship
-     * @param string $resourceClass
-     * @return DeferredValue
-     */
-    protected function many(string $relationship, string $resourceClass): DeferredValue
-    {
-        return $this->use($relationship, function ($model) use ($resourceClass) {
-            return $resourceClass::collection($model);
-        });
-    }
-
-    /**
-     * @param string $relationship
-     * @param string $resourceClass
-     * @return DeferredValue
-     */
-    protected function one(string $relationship, string $resourceClass): DeferredValue
-    {
-        return $this->use($relationship, function ($model) use ($resourceClass) {
-            return $resourceClass::make($model);
         });
     }
 
