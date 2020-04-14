@@ -33,12 +33,18 @@ class LoadMissingDeferredValue extends DeferredValue
             ->each(function (Collection $collection, $relation) {
                 EloquentCollection::make($collection->pluck('resource.resource'))
                     ->loadMissing($relation);
+            });
 
-                $collection->each(function (LoadMissingDeferredValue $deferredValue) use ($relation) {
-                    if ($deferredValue->resolver) {
-                        ($deferredValue->resolver)($deferredValue->resource->$relation);
-                    }
-                });
+        collect($deferredValues)
+            ->filter(function (LoadMissingDeferredValue $deferredValue) {
+                return $deferredValue->resolver;
+            })
+            ->each(function (LoadMissingDeferredValue $deferredValue) {
+                $relations = collect($deferredValue->relations)->map(function ($relation) use ($deferredValue) {
+                    return $deferredValue->resource->$relation;
+                })->all();
+
+                ($deferredValue->resolver)(...$relations);
             });
     }
 }

@@ -99,7 +99,7 @@ trait ResolvesResources
         collect($deferredValues)->groupBy(function (DeferredValue $deferredValue) {
             return get_class($deferredValue);
         })->each(function (Collection $deferredValues, $deferredValueClass) {
-            $deferredValueClass::resolve($deferredValues->toArray());
+            $deferredValueClass::resolve($deferredValues->all());
         });
     }
 
@@ -161,7 +161,7 @@ trait ResolvesResources
         })->flatten();
 
         if (!$preloads->isEmpty()) {
-            $this->resolveDeferredValues($preloads->toArray());
+            $this->resolveDeferredValues($preloads->all());
         }
 
         return $preloads;
