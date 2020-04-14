@@ -13,11 +13,21 @@ class FullLibraryResourceTest extends ResourceTestCase
     public function resourceProvider(): array
     {
         return [
-            [ Library::class, 'full_library', Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\LibraryResource::class ],
-            [ Library::class, 'full_library', Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Preload\LibraryResource::class ],
-            [ Library::class, 'full_library', Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Inline\LibraryResource::class ],
-            [ Library::class, 'full_library', Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Callback\LibraryResource::class ],
-            [ Library::class, 'full_library', Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Mix\LibraryResource::class ],
+            [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\LibraryResource::class ],
+            [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Preload\LibraryResource::class ],
+            [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Inline\LibraryResource::class ],
+            [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Callback\LibraryResource::class ],
+            [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Mix\LibraryResource::class ],
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function produce(int $amount)
+    {
+        return factory(Library::class, $amount > 1 ? $amount : null)
+            ->preset('full_library')
+            ->create();
     }
 }

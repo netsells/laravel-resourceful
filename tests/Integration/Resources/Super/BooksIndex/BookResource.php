@@ -16,9 +16,6 @@ class BookResource extends JsonResource
     {
         $preloads = [
             $this->preload('genres'),
-//            $this->preload('author'),
-//            $this->preload('relatedBooks'),
-//            $this->preload('coauthors'),
         ];
 
         if ($this->shelf_id) {
@@ -45,12 +42,6 @@ class BookResource extends JsonResource
                 ]);
             }, 'Not in stock'),
             'authors' => $this->use(['coauthors', 'author'], function () {
-                foreach (['coauthors', 'author'] as $relationship) {
-                    if (!$this->resource->relationLoaded($relationship)) {
-                        dump(get_class($this->resource) . ' ' . $relationship . ' not loaded');
-                    }
-                }
-
                 return AuthorResource::collection(
                     Collection::make([$this->author])->concat($this->coauthors)
                 );
