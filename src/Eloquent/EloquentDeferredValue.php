@@ -38,7 +38,7 @@ abstract class EloquentDeferredValue extends DeferredValue
             })
             ->each(function (EloquentDeferredValue $deferredValue) {
                 $relations = collect($deferredValue->relations)->map(function ($relation) use ($deferredValue) {
-                    return $deferredValue->resource->$relation;
+                    return data_get($deferredValue->resource, $relation);
                 })->all();
 
                 ($deferredValue->resolver)(...$relations);
