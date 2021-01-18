@@ -4,6 +4,7 @@ namespace Netsells\Http\Resources\Tests\Integration;
 
 use Faker\Generator as Faker;
 use Illuminate\Database\Connection;
+use Makeable\LaravelFactory\Factory;
 use Netsells\Http\Resources\Tests\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -18,7 +19,7 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
-        $this->withFactories(__DIR__ . '/Database/Factories');
+        $this->app->make(Factory::class)->load(__DIR__ . '/Database/Factories');
         $this->artisan('migrate', ['--database' => 'testing']);
 
         $this->faker = $this->app->make(Faker::class);
