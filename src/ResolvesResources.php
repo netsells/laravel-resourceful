@@ -2,6 +2,7 @@
 
 namespace Netsells\Http\Resources;
 
+use Illuminate\Http\Resources\PotentiallyMissing;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Netsells\Http\Resources\Json\JsonResource;
@@ -118,6 +119,8 @@ trait ResolvesResources
                 $childResourceHandlers[] = new ChildResourceHandler($v, function () use (&$resource, $k, $v) {
                     $resource[$k] = $v->resolve(...func_get_args());
                 });
+            } else if ($v instanceof PotentiallyMissing && $v->isMissing()) {
+                unset($resource[$k]);
             }
         }
 
