@@ -3,7 +3,9 @@
 namespace Netsells\Http\Resources\Tests\Integration;
 
 use Akamon\MockeryCallableMock\MockeryCallableMock;
+use Illuminate\Http\Resources\MissingValue;
 use Netsells\Http\Resources\Tests\Integration\Database\Models\Book;
+use Netsells\Http\Resources\Tests\Integration\Resources\UseMode\BookWithMissingRelation;
 use Netsells\Http\Resources\Tests\Integration\Resources\UseMode\BookWithMultiRelations;
 use Netsells\Http\Resources\Tests\Integration\Resources\UseMode\BookWithSingleRelation;
 
@@ -38,12 +40,37 @@ class UseModeTest extends TestCase
             ->response();
     }
 
-    protected function toCallback(callable $matcher): MockeryCallableMock
+    public function testUseSkipsMissingValue()
     {
-        return tap(new MockeryCallableMock(), function (MockeryCallableMock $callback) use ($matcher) {
-            $callback->shouldBeCalled()
+        /** @var Book $book */
+        $book = factory(Book::class)->with('author')->create()->fresh();
+
+        $response = BookWithMissingRelation::make($book)
+            ->withCallback(
+                $this->toCallback(function ($shelf) {
+                    return $shelf === null;
+                }, function () {
+                    return new MissingValue();
+                })
+            )
+            ->response();
+
+        $this->assertEquals(['data' => [
+            'normal_field' => 'hello',
+            'null_field' => null,
+        ]], $response->getData(true));
+    }
+
+    protected function toCallback(callable $matcher, ?callable $returning = null): MockeryCallableMock
+    {
+        return tap(new MockeryCallableMock(), function (MockeryCallableMock $callback) use ($matcher, $returning) {
+            $expectation = $callback->shouldBeCalled()
                 ->once()
                 ->withArgs($matcher);
+
+            if ($returning) {
+                $expectation->andReturnUsing($returning);
+            }
         });
     }
 }
