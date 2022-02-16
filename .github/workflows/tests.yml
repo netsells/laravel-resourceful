@@ -4,7 +4,8 @@ on: [pull_request, workflow_dispatch]
 
 jobs:
   test:
-    runs-on: [self-hosted, ubuntu]
+    # not self-hosted, because it's a public repo
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout the repo
@@ -16,8 +17,6 @@ jobs:
           php-version: '7.4'
           extensions: zip, gd, sqlite, json, gmp, bcmath
           coverage: none
-        env:
-          runner: self-hosted
 
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
