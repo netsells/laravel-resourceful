@@ -11,15 +11,9 @@ abstract class EloquentDeferredValue extends DeferredValue
     /**
      * @var string[]
      */
-    public $relations;
+    public array $relations;
 
-    /**
-     * EloquentDeferredValue constructor.
-     * @param JsonResource|ResourceCollection $resource
-     * @param array $relations
-     * @param callable|null $callback
-     */
-    public function __construct($resource, array $relations, ?callable $callback = null)
+    public function __construct(JsonResource|ResourceCollection $resource, array $relations, ?callable $callback = null)
     {
         parent::__construct($resource, $callback);
         $this->relations = $relations;
@@ -28,7 +22,7 @@ abstract class EloquentDeferredValue extends DeferredValue
     /**
      * @param static[] $deferredValues
      */
-    public static function resolve(array $deferredValues)
+    public static function resolve(array $deferredValues): void
     {
         static::loadEloquentRelations($deferredValues);
 
@@ -48,7 +42,6 @@ abstract class EloquentDeferredValue extends DeferredValue
     /**
      * Begins eager loading eloquent model relations.
      * @param static[] $deferredValues
-     * @return string
      */
-    abstract protected static function loadEloquentRelations(array $deferredValues);
+    abstract protected static function loadEloquentRelations(array $deferredValues): void;
 }

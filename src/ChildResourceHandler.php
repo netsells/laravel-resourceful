@@ -7,18 +7,12 @@ use Netsells\Http\Resources\Json\ResourceCollection;
 
 class ChildResourceHandler
 {
-    /** @var JsonResource|ResourceCollection */
-    public $childResource;
+    public JsonResource|ResourceCollection $childResource;
 
     /** @var callable */
     public $resolver;
 
-    /**
-     * ChildResourceHandler constructor.
-     * @param JsonResource|ResourceCollection $childResource
-     * @param callable $resolver
-     */
-    public function __construct($childResource, callable $resolver)
+    public function __construct(JsonResource|ResourceCollection $childResource, callable $resolver)
     {
         $this->childResource = $childResource;
         $this->resolver = $resolver;

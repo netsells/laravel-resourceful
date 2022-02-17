@@ -2,21 +2,26 @@
 
 namespace Netsells\Http\Resources\Json;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Netsells\Http\Resources\DeferredValue;
 use Netsells\Http\Resources\Eloquent\ResolvesEloquentResources;
 use Netsells\Http\Resources\ResolvesResources;
 
 class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
 {
-    use ResolvesResources, ResolvesEloquentResources;
+    use ResolvesResources;
+    use ResolvesEloquentResources;
 
     /**
-     * Create new anonymous resource collection.
-     *
-     * @param  mixed  $resource
-     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @return DeferredValue|DeferredValue[]
      */
-    public static function collection($resource)
+    public function preloads(/** @param Request $request */)
+    {
+        return [];
+    }
+
+    public static function collection(mixed $resource): AnonymousResourceCollection
     {
         return tap(new AnonymousResourceCollection($resource, static::class), function ($collection) {
             if (property_exists(static::class, 'preserveKeys')) {
@@ -25,7 +30,7 @@ class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
         });
     }
 
-    protected function beforeResolveRoot($request)
+    protected function beforeResolveRoot(Request $request): void
     {
         $this->collectAndResolvePreloads($request, Collection::make([$this]));
     }
