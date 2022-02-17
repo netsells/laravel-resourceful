@@ -7,6 +7,13 @@ jobs:
     # not self-hosted, because it's a public repo
     runs-on: ubuntu-latest
 
+    # we want to run it on combination of Laravel 8+ and PHP 8+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.0', '8.1']
+        laravel: [8, 9]
+
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v2
@@ -14,12 +21,17 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: ${{ matrix.php }}
           extensions: zip, gd, sqlite, json, gmp, bcmath
           coverage: none
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Ensure we use specific version of Laravel
+        env:
+          LARAVEL_VERSION: ${{ matrix.laravel }}
+        run: composer require laravel/framework $LARAVEL_VERSION -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Execute tests
         run: vendor/bin/phpunit
