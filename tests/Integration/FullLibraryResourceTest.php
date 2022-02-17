@@ -2,13 +2,14 @@
 
 namespace Netsells\Http\Resources\Tests\Integration;
 
-use Netsells\Http\Resources\Tests\Integration\Database\Models\Library;
 use Netsells\Http\Resources\Tests\Integration\Resources\Basic;
 use Netsells\Http\Resources\Tests\Integration\Resources\Super;
 
 class FullLibraryResourceTest extends ResourceTestCase
 {
-    protected $dumpsQueryCount = false;
+    use Presets;
+
+    protected bool $dumpsQueryCount = false;
 
     public function resourceProvider(): array
     {
@@ -26,8 +27,6 @@ class FullLibraryResourceTest extends ResourceTestCase
      */
     protected function produce(int $amount)
     {
-        return factory(Library::class, $amount > 1 ? $amount : null)
-            ->preset('full_library')
-            ->create();
+        return $this->fullLibraryFactory($amount > 1 ? $amount : null)->create();
     }
 }

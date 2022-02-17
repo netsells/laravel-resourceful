@@ -2,6 +2,8 @@
 
 namespace Netsells\Http\Resources;
 
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\PotentiallyMissing;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -10,27 +12,25 @@ use Netsells\Http\Resources\Json\ResourceCollection;
 
 trait ResolvesResources
 {
-    /**
-     * @var bool
-     */
-    protected $resolvingRoot = false;
+    protected bool $resolvingRoot = false;
 
     /**
      * Create an HTTP response that represents the object.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return JsonResponse
      */
     public function toResponse($request)
     {
         $this->resolvingRoot = true;
+
         return parent::toResponse($request);
     }
 
     /**
      * Resolve the resource to an array.
      *
-     * @param  \Illuminate\Http\Request|null  $request
+     * @param Request|null $request
      * @return array
      */
     public function resolve($request = null)
@@ -45,12 +45,7 @@ trait ResolvesResources
         return parent::resolve($request);
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     * @param array $initiallyResolved
-     * @return array
-     */
-    protected function resolveRoot($request, array $initiallyResolved): array
+    protected function resolveRoot(Request $request, array $initiallyResolved): array
     {
         do {
             $deferredValues = $this->collectDeferredValues($initiallyResolved);
@@ -98,7 +93,7 @@ trait ResolvesResources
     protected function resolveDeferredValues(array $deferredValues): void
     {
         collect($deferredValues)->groupBy(function (DeferredValue $deferredValue) {
-            return get_class($deferredValue);
+            return $deferredValue::class;
         })->each(function (Collection $deferredValues, $deferredValueClass) {
             $deferredValueClass::resolve($deferredValues->all());
         });
@@ -128,38 +123,37 @@ trait ResolvesResources
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param array $childResourceHandlers
+     * @param Request $request
+     * @param ChildResourceHandler[] $childResourceHandlers
      */
-    protected function resolveChildResources($request, array $childResourceHandlers): void
+    protected function resolveChildResources(Request $request, array $childResourceHandlers): void
     {
         $resources = collect($childResourceHandlers)
             ->flatMap(function (ChildResourceHandler $childResourceHandler) {
                 $childResource = $childResourceHandler->childResource;
+
                 if ($childResource instanceof ResourceCollection) {
                     return $childResource->collection;
-                } else {
-                    return Collection::make([$childResource]);
                 }
+
+                return Collection::make([$childResource]);
             });
 
         $this->collectAndResolvePreloads($request, $resources);
 
-        collect($childResourceHandlers)->each(function (ChildResourceHandler $childResourceHandler) use ($request) {
+        foreach ($childResourceHandlers as $childResourceHandler) {
             ($childResourceHandler->resolver)($request);
-        });
+        }
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
-     * @param Collection $resources
-     * @return Collection
+     * @param Request $request
+     * @param Collection<JsonResource> $resources
+     * @return Collection<DeferredValue>
      */
-    protected function collectAndResolvePreloads($request, Collection $resources): Collection
+    protected function collectAndResolvePreloads(Request $request, Collection $resources): Collection
     {
-        $preloads = $resources->filter(function (JsonResource $resource) {
-            return method_exists($resource, 'preloads');
-        })->map(function (JsonResource $resource) use ($request) {
+        $preloads = $resources->map(function (JsonResource $resource) use ($request) {
             return Arr::wrap($resource->preloads($request));
         })->flatten();
 

@@ -11,7 +11,7 @@ class PreloadModeTest extends TestCase
     public function testPreloadLoadsSingleRelationOnResource()
     {
         /** @var Book $book */
-        $book = factory(Book::class)->with('author')->create()->fresh();
+        $book = Book::factory()->forAuthor()->create()->fresh();
 
         BookWithSingleRelation::make($book)->response();
 
@@ -21,7 +21,7 @@ class PreloadModeTest extends TestCase
     public function testPreloadLoadsMultipleRelationsOnResource()
     {
         /** @var Book $book */
-        $book = factory(Book::class)->with('author')->create()->fresh();
+        $book = Book::factory()->forAuthor()->create()->fresh();
 
         BookWithMultiRelations::make($book)->response();
 
@@ -32,7 +32,7 @@ class PreloadModeTest extends TestCase
     public function testPreloadLoadsSingleRelationOnResourceCollection()
     {
         /** @var Book[] $books */
-        $books = factory(Book::class, 3)->with('author')->create()->fresh();
+        $books = Book::factory()->count(3)->forAuthor()->create()->fresh();
 
         BookWithSingleRelation::collection($books)->response();
 
@@ -44,7 +44,7 @@ class PreloadModeTest extends TestCase
     public function testPreloadLoadsMultipleRelationsOnResourceCollection()
     {
         /** @var Book[] $books */
-        $books = factory(Book::class, 3)->with('author')->create()->fresh();
+        $books = Book::factory()->count(3)->forAuthor()->create()->fresh();
 
         BookWithMultiRelations::collection($books)->response();
 

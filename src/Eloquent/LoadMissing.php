@@ -10,7 +10,7 @@ class LoadMissing extends EloquentDeferredValue
     /**
      * @inheritDoc
      */
-    protected static function loadEloquentRelations(array $deferredValues)
+    protected static function loadEloquentRelations(array $deferredValues): void
     {
         collect($deferredValues)->groupBy('relations')
             ->each(function (Collection $collection, $relation) {

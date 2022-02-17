@@ -7,10 +7,7 @@ use Netsells\Http\Resources\Json\ResourceCollection;
 
 abstract class DeferredValue
 {
-    /**
-     * @var JsonResource|ResourceCollection
-     */
-    public $resource;
+    public JsonResource|ResourceCollection $resource;
 
     /** @var callable|null */
     public $callback;
@@ -18,22 +15,13 @@ abstract class DeferredValue
     /** @var callable|null */
     public $resolver;
 
-    /**
-     * DeferredValue constructor.
-     * @param JsonResource $resource
-     * @param callable|null $callback
-     */
-    public function __construct($resource, ?callable $callback = null)
+    public function __construct(JsonResource $resource, ?callable $callback = null)
     {
         $this->resource = $resource;
         $this->callback = $callback;
     }
 
-    /**
-     * @param callable $resolver
-     * @return $this
-     */
-    public function useResolver(callable $resolver): self
+    public function useResolver(callable $resolver): static
     {
         $this->resolver = $resolver;
 
@@ -43,5 +31,5 @@ abstract class DeferredValue
     /**
      * @param static[] $deferredValues
      */
-    abstract public static function resolve(array $deferredValues);
+    abstract public static function resolve(array $deferredValues): void;
 }

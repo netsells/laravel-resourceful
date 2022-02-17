@@ -2,17 +2,18 @@
 
 namespace Netsells\Http\Resources\Tests\Integration;
 
-use Faker\Generator as Faker;
-use Makeable\LaravelFactory\FactoryBuilder;
+use Illuminate\Support\Collection;
 use Netsells\Http\Resources\Tests\Integration\Database\Models\Author;
 use Netsells\Http\Resources\Tests\Integration\Database\Models\Book;
+use Netsells\Http\Resources\Tests\Integration\Database\Models\Library;
+use Netsells\Http\Resources\Tests\Integration\Database\Models\Shelf;
 use Netsells\Http\Resources\Tests\Integration\Resources\Basic;
 use Netsells\Http\Resources\Tests\Integration\Resources\Super;
 
 class BooksIndexResourceTest extends ResourceTestCase
 {
-    protected $dumpsQueryCount = false;
-    protected $dumpsJson = false;
+    protected bool $dumpsQueryCount = false;
+    protected bool $dumpsJson = false;
 
     public function resourceProvider(): array
     {
@@ -26,22 +27,33 @@ class BooksIndexResourceTest extends ResourceTestCase
      */
     protected function produce(int $amount)
     {
-        return tap(
-            factory(Book::class, $amount > 1 ? $amount : null)
-                ->with('author')
-                ->odds('40%', function (FactoryBuilder $book) {
-                    return $book->with('shelf', function (FactoryBuilder $shelf, Faker $faker) {
-                        return $shelf->with('library')
-                            ->with($faker->numberBetween(1, 3), 'books')
-                            ->with(1, 'books.author');
-                    });
-                })
-                ->create(),
-            function () {
-                $this->assignCoauthors();
-                $this->assignRelatedBooks();
+        /** @var Book|Collection<Book> $books */
+        $books = Book::factory()->count($amount > 1 ? $amount : null)->forAuthor()->create();
+
+        $this->assignAuthors();
+        $this->assignCoauthors();
+        $this->assignRelatedBooks();
+
+        return $books;
+    }
+
+    protected function assignAuthors(): void
+    {
+        Book::query()->each(function (Book $book) {
+            if ($this->faker->boolean(60)) {
+                return;
             }
-        );
+
+            $shelf = Shelf::factory()
+                ->for(Library::factory())
+                ->has(
+                    Book::factory()
+                        ->for(Author::factory())
+                        ->count($this->faker->numberBetween(1, 3)),
+                );
+
+            $book->shelf()->associate($shelf->create())->save();
+        });
     }
 
     protected function assignCoauthors(): void
