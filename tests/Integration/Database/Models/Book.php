@@ -3,9 +3,11 @@
 namespace Netsells\Http\Resources\Tests\Integration\Database\Models;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Netsells\Http\Resources\Tests\Integration\Database\Factories\BookFactory;
 
 /**
  * @property int $id
@@ -22,6 +24,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 class Book extends Model
 {
+    use HasFactory;
+
     public $timestamps = false;
 
     public function shelf(): BelongsTo
@@ -47,5 +51,10 @@ class Book extends Model
     public function relatedBooks(): BelongsToMany
     {
         return $this->belongsToMany(Book::class, 'related_books', 'book_id', 'related_book_id');
+    }
+
+    protected static function newFactory(): BookFactory
+    {
+        return BookFactory::new();
     }
 }

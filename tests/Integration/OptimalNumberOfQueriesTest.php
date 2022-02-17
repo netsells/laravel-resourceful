@@ -8,6 +8,8 @@ use Netsells\Http\Resources\Tests\Integration\Resources\Super;
 
 class OptimalNumberOfQueriesTest extends TestCase
 {
+    use Presets;
+
     public function resourceProvider(): array
     {
         return [
@@ -25,7 +27,7 @@ class OptimalNumberOfQueriesTest extends TestCase
      */
     public function testCreatesAsManyQueriesAsEagerLoadingResourceCollection(string $basicClass, string $superClass)
     {
-        factory(Library::class)->preset('full_library')->create();
+        $this->fullLibraryFactory()->create();
 
         // count how many queries are performed when performing eager loading
         $libraries = $this->withQueryLog($optimalQueryLog, function () {
@@ -59,8 +61,7 @@ class OptimalNumberOfQueriesTest extends TestCase
      */
     public function testCreatesAsManyQueriesAsLazyEagerLoadingResourceCollection(string $basicClass, string $superClass)
     {
-        /** @var Library $library */
-        factory(Library::class)->preset('full_library')->create();
+        $this->fullLibraryFactory()->create();
 
         // count how many queries are performed when performing lazy eager loading
         $this->withQueryLog($optimalQueryLog, function () use ($basicClass) {
@@ -88,7 +89,7 @@ class OptimalNumberOfQueriesTest extends TestCase
      */
     public function testCreatesAsManyQueriesAsEagerLoadingResource(string $basicClass, string $superClass)
     {
-        factory(Library::class)->preset('full_library')->create();
+        $this->fullLibraryFactory()->create();
 
         // count how many queries are performed when performing eager loading
         $library = $this->withQueryLog($optimalQueryLog, function () {
@@ -122,8 +123,7 @@ class OptimalNumberOfQueriesTest extends TestCase
      */
     public function testCreatesAsManyQueriesAsLazyEagerLoadingResource(string $basicClass, string $superClass)
     {
-        /** @var Library $library */
-        factory(Library::class)->preset('full_library')->create();
+        $this->fullLibraryFactory()->create();
 
         // count how many queries are performed when performing lazy eager loading
         $this->withQueryLog($optimalQueryLog, function () use ($basicClass) {

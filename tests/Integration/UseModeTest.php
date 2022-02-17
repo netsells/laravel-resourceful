@@ -14,7 +14,7 @@ class UseModeTest extends TestCase
     public function testUseLoadsAndProvidesSingleRelation()
     {
         /** @var Book $book */
-        $book = factory(Book::class)->with('author')->create()->fresh();
+        $book = Book::factory()->forAuthor()->create()->fresh();
 
         BookWithSingleRelation::make($book)
             ->withCallback(
@@ -28,7 +28,7 @@ class UseModeTest extends TestCase
     public function testUseLoadsAndProvidesMultipleRelations()
     {
         /** @var Book $book */
-        $book = factory(Book::class)->with('author')->create()->fresh();
+        $book = Book::factory()->forAuthor()->create()->fresh();
 
         BookWithMultiRelations::make($book)
             ->withCallback(
@@ -43,7 +43,7 @@ class UseModeTest extends TestCase
     public function testUseSkipsMissingValue()
     {
         /** @var Book $book */
-        $book = factory(Book::class)->with('author')->create()->fresh();
+        $book = Book::factory()->forAuthor()->create()->fresh();
 
         $response = BookWithMissingRelation::make($book)
             ->withCallback(

@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class ResourceTestCase extends TestCase
 {
-    protected $dumpsQueryCount = false;
-    protected $dumpsJson = false;
-    protected $collectionSize = 4;
+    protected bool $dumpsQueryCount = false;
+    protected bool $dumpsJson = false;
+    protected int $collectionSize = 4;
 
     /**
      * @dataProvider resourceProvider
