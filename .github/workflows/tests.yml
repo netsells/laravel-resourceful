@@ -25,13 +25,10 @@ jobs:
           extensions: zip, gd, sqlite, json, gmp, bcmath
           coverage: none
 
-      - name: Install dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --prefer-dist
-
-      - name: Ensure we use specific version of Laravel
+      - name: Ensure we use specific version of Laravel, and install other dependencies
         env:
           LARAVEL_VERSION: ${{ matrix.laravel }}
-        run: composer require laravel/framework $LARAVEL_VERSION -q --no-ansi --no-interaction --no-scripts --prefer-dist
+        run: composer require laravel/framework $LARAVEL_VERSION --no-interaction --no-scripts --prefer-dist
 
       - name: Execute tests
         run: vendor/bin/phpunit
