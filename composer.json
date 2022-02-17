@@ -1,7 +1,14 @@
 {
     "name": "netsells/laravel-http-resources",
-    "description": "Laravel Resources supercharged",
+    "description": "Laravel API Resources supercharged to get rid of N+1 problems.",
     "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "api resource",
+        "n+1",
+        "eager loading"
+    ],
     "authors": [
         {
             "name": "Jakub Gawron",
