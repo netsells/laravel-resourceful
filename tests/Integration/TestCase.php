@@ -8,16 +8,11 @@ use Netsells\Http\Resources\Tests\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
-    /**
-     * @var Faker
-     */
-    protected $faker;
+    protected Faker $faker;
 
     public function setUp(): void
     {
         parent::setUp();
-
-        // $this->artisan('migrate', ['--database' => 'testing']);
 
         $this->faker = $this->app->make(Faker::class);
     }
