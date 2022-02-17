@@ -5,8 +5,8 @@
     "license": "MIT",
     "keywords": [
         "laravel",
+        "netsells",
         "api resource",
-        "n+1",
         "eager loading"
     ],
     "authors": [
