@@ -1,5 +1,5 @@
 {
-    "name": "netsells/laravel-http-resources",
+    "name": "netsells/laravel-resourceful",
     "description": "Laravel API Resources supercharged to get rid of N+1 problems.",
     "type": "library",
     "license": "MIT",
@@ -13,6 +13,10 @@
         {
             "name": "Jakub Gawron",
             "email": "jakub.gawron@netsells.co.uk"
+        },
+        {
+            "name": "Sam Jordan",
+            "email": "sam.jordan@netsells.co.uk"
         }
     ],
     "require": {

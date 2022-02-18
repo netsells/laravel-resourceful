@@ -1,6 +1,6 @@
-# Laravel HTTP Resources
+# Laravel Resourceful
 
-Package that helps you use Eloquent API Resources without killing your database! Say goodbye to N+1 :wave:
+Package that helps you use Laravel API Resources without killing your database! Say goodbye to N+1 :wave:
 
 
 ## The Problem
@@ -83,7 +83,7 @@ This package fixes all those problems and makes the N+1 problem within your API 
 using composer:
 
 ```bash
-composer require netsells/laravel-http-resources
+composer require netsells/laravel-resourceful
 ```
 
 
