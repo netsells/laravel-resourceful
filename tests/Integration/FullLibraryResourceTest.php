@@ -11,7 +11,7 @@ class FullLibraryResourceTest extends ResourceTestCase
 
     protected bool $dumpsQueryCount = false;
 
-    public function resourceProvider(): array
+    public static function resourceProvider(): array
     {
         return [
             [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\LibraryResource::class ],

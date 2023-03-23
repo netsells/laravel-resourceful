@@ -10,7 +10,7 @@ class OptimalNumberOfQueriesTest extends TestCase
 {
     use Presets;
 
-    public function resourceProvider(): array
+    public static function resourceProvider(): array
     {
         return [
             [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Preload\LibraryResource::class ],
