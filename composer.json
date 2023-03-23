@@ -22,10 +22,10 @@
     "require": {
         "php": ">=8.0",
         "ext-json": "*",
-        "laravel/framework": "^8.12 || ^9.0"
+        "laravel/framework": "^8.12 || ^9.0 || ^10.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^6.0 || ^7.0",
+        "orchestra/testbench": "^6.0 || ^7.0 || ^8.0",
         "tmarsteel/mockery-callable-mock": "~2.1"
     },
     "autoload": {
