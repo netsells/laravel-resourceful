@@ -15,7 +15,7 @@ class BooksIndexResourceTest extends ResourceTestCase
     protected bool $dumpsQueryCount = false;
     protected bool $dumpsJson = false;
 
-    public function resourceProvider(): array
+    public static function resourceProvider(): array
     {
         return [
             [ Basic\BooksIndex\BookResource::class, Super\BooksIndex\BookResource::class ],
