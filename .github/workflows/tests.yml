@@ -14,7 +14,7 @@ jobs:
         php: ['8.0', '8.1']
         laravel: ['^8.12', '^9.0', '^10.0']
         exclude:
-          # minimum php version for Laravel 10 is PHP 8.1
+          # minimum php version for Laravel 10 is PHP 8.1 so we need to exclude (php 8.0 and laravel 10) combination
           - php: '8.0'
             laravel: '^10.0'
 
