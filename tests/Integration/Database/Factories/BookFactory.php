@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Netsells\Http\Resources\Tests\Integration\Database\Models\Book;
 use Netsells\Http\Resources\Tests\Integration\Database\Models\Genre;
 
+/**
+ * @extends Factory<Book>
+ */
 class BookFactory extends Factory
 {
     protected $model = Book::class;

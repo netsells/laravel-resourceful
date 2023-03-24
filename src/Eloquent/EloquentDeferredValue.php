@@ -29,7 +29,7 @@ abstract class EloquentDeferredValue extends DeferredValue
 
         Collection::make($deferredValues)
             ->filter(function (EloquentDeferredValue $deferredValue) {
-                return $deferredValue->resolver;
+                return (bool) $deferredValue->resolver;
             })
             ->each(function (EloquentDeferredValue $deferredValue) {
                 $relations = Collection::make($deferredValue->relations)->map(function ($relation) use ($deferredValue) {

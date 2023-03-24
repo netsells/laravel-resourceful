@@ -5,6 +5,9 @@ namespace Netsells\Http\Resources\Tests\Integration\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Netsells\Http\Resources\Tests\Integration\Database\Models\Library;
 
+/**
+ * @extends Factory<Library>
+ */
 class LibraryFactory extends Factory
 {
     protected $model = Library::class;

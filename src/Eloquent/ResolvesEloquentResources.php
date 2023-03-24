@@ -2,13 +2,12 @@
 
 namespace Netsells\Http\Resources\Eloquent;
 
-use Netsells\Http\Resources\DeferredValue;
 use Netsells\Http\Resources\Json\JsonResource;
 
 trait ResolvesEloquentResources
 {
     /**
-     * @var class-string<DeferredValue>
+     * @var class-string<EloquentDeferredValue>
      */
     protected string $defaultDeferredValueClass = LoadMissing::class;
 

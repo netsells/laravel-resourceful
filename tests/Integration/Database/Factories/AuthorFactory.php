@@ -5,6 +5,9 @@ namespace Netsells\Http\Resources\Tests\Integration\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Netsells\Http\Resources\Tests\Integration\Database\Models\Author;
 
+/**
+ * @extends Factory<Author>
+ */
 class AuthorFactory extends Factory
 {
     protected $model = Author::class;

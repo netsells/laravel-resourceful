@@ -94,7 +94,7 @@ trait ResolvesResources
     {
         Collection::make($deferredValues)->groupBy(function (DeferredValue $deferredValue) {
             return $deferredValue::class;
-        })->each(function (Collection $deferredValues, $deferredValueClass) {
+        })->each(function (Collection $deferredValues, /** @param class-string<DeferredValue> */ string $deferredValueClass) {
             $deferredValueClass::resolve($deferredValues->all());
         });
     }
@@ -151,7 +151,11 @@ trait ResolvesResources
     protected function collectAndResolvePreloads(Request $request, Collection $resources): Collection
     {
         $preloads = $resources->map(function (JsonResource $resource) use ($request) {
-            return Arr::wrap($resource->preloads($request));
+            if (method_exists($resource, 'preloads')) {
+                return Arr::wrap($resource->preloads($request));
+            }
+
+            return [];
         })->flatten();
 
         if (! $preloads->isEmpty()) {
