@@ -35,8 +35,8 @@ class BookResource extends JsonResource
                 return $genre->name;
             }),
             'location' => $this->when($this->shelf_id, function () {
-                return join(', ', [
-                    $this->shelf->row . $this->shelf->column,
+                return implode(', ', [
+                    $this->shelf->row.$this->shelf->column,
                     $this->shelf->library->name,
                     $this->shelf->library->city,
                 ]);

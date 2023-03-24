@@ -14,16 +14,16 @@ class FullLibraryResourceTest extends ResourceTestCase
     public static function resourceProvider(): array
     {
         return [
-            [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\LibraryResource::class ],
-            [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Preload\LibraryResource::class ],
-            [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Inline\LibraryResource::class ],
-            [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Callback\LibraryResource::class ],
-            [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Mix\LibraryResource::class ],
+            [Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\LibraryResource::class],
+            [Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Preload\LibraryResource::class],
+            [Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Inline\LibraryResource::class],
+            [Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Callback\LibraryResource::class],
+            [Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Mix\LibraryResource::class],
         ];
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function produce(int $amount)
     {

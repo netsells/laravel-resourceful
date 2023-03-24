@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 class LoadCount extends EloquentDeferredValue
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected static function loadEloquentRelations(array $deferredValues): void
     {

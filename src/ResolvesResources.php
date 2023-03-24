@@ -39,6 +39,7 @@ trait ResolvesResources
             if (method_exists($this, 'beforeResolveRoot')) {
                 $this->beforeResolveRoot($request);
             }
+
             return $this->resolveRoot($request, parent::resolve($request));
         }
 
@@ -50,22 +51,21 @@ trait ResolvesResources
         do {
             $deferredValues = $this->collectDeferredValues($initiallyResolved);
 
-            if (!empty($deferredValues)) {
+            if (! empty($deferredValues)) {
                 $this->resolveDeferredValues($deferredValues);
             }
 
             $childResourceHandlers = $this->collectChildResourceHandlers($initiallyResolved);
 
-            if (!empty($childResourceHandlers)) {
+            if (! empty($childResourceHandlers)) {
                 $this->resolveChildResources($request, $childResourceHandlers);
             }
-        } while (!empty($deferredValues) || !empty($childResourceHandlers));
+        } while (! empty($deferredValues) || ! empty($childResourceHandlers));
 
         return $initiallyResolved;
     }
 
     /**
-     * @param array $resource
      * @return DeferredValue[]
      */
     protected function collectDeferredValues(array &$resource): array
@@ -75,7 +75,7 @@ trait ResolvesResources
         foreach ($resource as $k => &$v) {
             if (is_array($v)) {
                 $deferredValues = array_merge($deferredValues, $this->collectDeferredValues($v));
-            } else if ($v instanceof DeferredValue) {
+            } elseif ($v instanceof DeferredValue) {
                 $deferredValues[] = $v->useResolver(function () use (&$resource, $k, $v) {
                     if ($v->callback) {
                         $resource[$k] = ($v->callback)(...func_get_args());
@@ -100,7 +100,6 @@ trait ResolvesResources
     }
 
     /**
-     * @param array $resource
      * @return ChildResourceHandler[]
      */
     protected function collectChildResourceHandlers(array &$resource): array
@@ -110,11 +109,11 @@ trait ResolvesResources
         foreach ($resource as $k => &$v) {
             if (is_array($v)) {
                 $childResourceHandlers = array_merge($childResourceHandlers, $this->collectChildResourceHandlers($v));
-            } else if ($v instanceof JsonResource || $v instanceof ResourceCollection) {
+            } elseif ($v instanceof JsonResource || $v instanceof ResourceCollection) {
                 $childResourceHandlers[] = new ChildResourceHandler($v, function () use (&$resource, $k, $v) {
                     $resource[$k] = $v->resolve(...func_get_args());
                 });
-            } else if ($v instanceof PotentiallyMissing && $v->isMissing()) {
+            } elseif ($v instanceof PotentiallyMissing && $v->isMissing()) {
                 unset($resource[$k]);
             }
         }
@@ -123,7 +122,6 @@ trait ResolvesResources
     }
 
     /**
-     * @param Request $request
      * @param ChildResourceHandler[] $childResourceHandlers
      */
     protected function resolveChildResources(Request $request, array $childResourceHandlers): void
@@ -147,7 +145,6 @@ trait ResolvesResources
     }
 
     /**
-     * @param Request $request
      * @param Collection<JsonResource> $resources
      * @return Collection<DeferredValue>
      */
@@ -157,7 +154,7 @@ trait ResolvesResources
             return Arr::wrap($resource->preloads($request));
         })->flatten();
 
-        if (!$preloads->isEmpty()) {
+        if (! $preloads->isEmpty()) {
             $this->resolveDeferredValues($preloads->all());
         }
 

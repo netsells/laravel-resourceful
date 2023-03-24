@@ -41,6 +41,7 @@ abstract class EloquentDeferredValue extends DeferredValue
 
     /**
      * Begins eager loading eloquent model relations.
+     *
      * @param static[] $deferredValues
      */
     abstract protected static function loadEloquentRelations(array $deferredValues): void;

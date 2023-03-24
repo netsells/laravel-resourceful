@@ -14,7 +14,7 @@ class ShelfResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'location' => $this->row . $this->column,
+            'location' => $this->row.$this->column,
             'books' => $this->use('books', function () {
                 return BookResource::collection($this->books);
             }),

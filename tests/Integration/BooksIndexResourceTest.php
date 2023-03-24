@@ -13,17 +13,18 @@ use Netsells\Http\Resources\Tests\Integration\Resources\Super;
 class BooksIndexResourceTest extends ResourceTestCase
 {
     protected bool $dumpsQueryCount = false;
+
     protected bool $dumpsJson = false;
 
     public static function resourceProvider(): array
     {
         return [
-            [ Basic\BooksIndex\BookResource::class, Super\BooksIndex\BookResource::class ],
+            [Basic\BooksIndex\BookResource::class, Super\BooksIndex\BookResource::class],
         ];
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function produce(int $amount)
     {
