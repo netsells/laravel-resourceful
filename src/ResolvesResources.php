@@ -92,7 +92,7 @@ trait ResolvesResources
      */
     protected function resolveDeferredValues(array $deferredValues): void
     {
-        collect($deferredValues)->groupBy(function (DeferredValue $deferredValue) {
+        Collection::make($deferredValues)->groupBy(function (DeferredValue $deferredValue) {
             return $deferredValue::class;
         })->each(function (Collection $deferredValues, $deferredValueClass) {
             $deferredValueClass::resolve($deferredValues->all());
@@ -126,7 +126,7 @@ trait ResolvesResources
      */
     protected function resolveChildResources(Request $request, array $childResourceHandlers): void
     {
-        $resources = collect($childResourceHandlers)
+        $resources = Collection::make($childResourceHandlers)
             ->flatMap(function (ChildResourceHandler $childResourceHandler) {
                 $childResource = $childResourceHandler->childResource;
 
