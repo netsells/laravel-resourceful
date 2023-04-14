@@ -4,7 +4,6 @@ on: [pull_request, workflow_dispatch]
 
 jobs:
   test:
-    # not self-hosted, because it's a public repo
     runs-on: ubuntu-latest
 
     # we want to run it on supported combination of Laravel and PHP versions
@@ -31,4 +30,4 @@ jobs:
         run: composer require laravel/framework $LARAVEL_VERSION --no-interaction --no-scripts --prefer-dist
 
       - name: Execute tests
-        run: vendor/bin/phpunit
+        run: composer run test
