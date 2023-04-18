@@ -27,7 +27,7 @@
     "require-dev": {
         "orchestra/testbench": "^7.0 || ^8.0",
         "tmarsteel/mockery-callable-mock": "~2.1",
-        "netsells/code-standards-laravel": "dev-feature/php8.2"
+        "netsells/code-standards-laravel": "^1.1"
     },
     "autoload": {
         "psr-4": {
