@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 abstract class ResourceTestCase extends TestCase
 {
     protected bool $dumpsQueryCount = false;
+
     protected bool $dumpsJson = false;
+
     protected int $collectionSize = 4;
 
     /**
      * @dataProvider resourceProvider
-     * @param string $basicClass
-     * @param string $superClass
      */
     public function testSuperReducesQueriesOverBasicResourceAndBothMatch(string $basicClass, string $superClass)
     {
@@ -34,8 +34,6 @@ abstract class ResourceTestCase extends TestCase
 
     /**
      * @dataProvider resourceProvider
-     * @param string $basicClass
-     * @param string $superClass
      */
     public function testSuperReducesQueriesOverBasicResourceCollectionAndBothMatch(string $basicClass, string $superClass)
     {
@@ -66,7 +64,7 @@ abstract class ResourceTestCase extends TestCase
                     'super' => $superQueryLog,
                 ]);
             } else {
-                dump($basicQueryCount . ' >= ' . $superQueryCount);
+                dump($basicQueryCount.' >= '.$superQueryCount);
             }
         }
 
@@ -82,7 +80,6 @@ abstract class ResourceTestCase extends TestCase
     }
 
     /**
-     * @param int $amount
      * @return Collection|Model
      */
     abstract protected function produce(int $amount);

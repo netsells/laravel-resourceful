@@ -13,17 +13,15 @@ class OptimalNumberOfQueriesTest extends TestCase
     public static function resourceProvider(): array
     {
         return [
-            [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Preload\LibraryResource::class ],
-            [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Inline\LibraryResource::class ],
-            [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Callback\LibraryResource::class ],
-            [ Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Mix\LibraryResource::class ],
+            [Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Preload\LibraryResource::class],
+            [Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Inline\LibraryResource::class],
+            [Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Callback\LibraryResource::class],
+            [Basic\FullLibrary\LibraryResource::class, Super\FullLibrary\Mix\LibraryResource::class],
         ];
     }
 
     /**
      * @dataProvider resourceProvider
-     * @param string $basicClass
-     * @param string $superClass
      */
     public function testCreatesAsManyQueriesAsEagerLoadingResourceCollection(string $basicClass, string $superClass)
     {
@@ -56,8 +54,6 @@ class OptimalNumberOfQueriesTest extends TestCase
 
     /**
      * @dataProvider resourceProvider
-     * @param string $basicClass
-     * @param string $superClass
      */
     public function testCreatesAsManyQueriesAsLazyEagerLoadingResourceCollection(string $basicClass, string $superClass)
     {
@@ -84,8 +80,6 @@ class OptimalNumberOfQueriesTest extends TestCase
 
     /**
      * @dataProvider resourceProvider
-     * @param string $basicClass
-     * @param string $superClass
      */
     public function testCreatesAsManyQueriesAsEagerLoadingResource(string $basicClass, string $superClass)
     {
@@ -118,8 +112,6 @@ class OptimalNumberOfQueriesTest extends TestCase
 
     /**
      * @dataProvider resourceProvider
-     * @param string $basicClass
-     * @param string $superClass
      */
     public function testCreatesAsManyQueriesAsLazyEagerLoadingResource(string $basicClass, string $superClass)
     {

@@ -4,7 +4,6 @@ namespace Netsells\Http\Resources\Json;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Netsells\Http\Resources\DeferredValue;
 use Netsells\Http\Resources\Eloquent\ResolvesEloquentResources;
 use Netsells\Http\Resources\ResolvesResources;
 
@@ -14,18 +13,13 @@ class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
     use ResolvesEloquentResources;
 
     /**
-     * @return DeferredValue|DeferredValue[]
+     * @deprecated This method can be removed when dropping support for Laravel 9.
      */
-    public function preloads(/** @param Request $request */)
+    public static function collection($resource)
     {
-        return [];
-    }
-
-    public static function collection(mixed $resource): AnonymousResourceCollection
-    {
-        return tap(new AnonymousResourceCollection($resource, static::class), function ($collection) {
+        return tap(static::newCollection($resource), function ($collection) { // @phpstan-ignore-line
             if (property_exists(static::class, 'preserveKeys')) {
-                $collection->preserveKeys = (new static([]))->preserveKeys === true;
+                $collection->preserveKeys = (new static([]))->preserveKeys === true; // @phpstan-ignore-line
             }
         });
     }
@@ -33,5 +27,10 @@ class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
     protected function beforeResolveRoot(Request $request): void
     {
         $this->collectAndResolvePreloads($request, Collection::make([$this]));
+    }
+
+    protected static function newCollection(mixed $resource): AnonymousResourceCollection
+    {
+        return new AnonymousResourceCollection($resource, static::class);
     }
 }

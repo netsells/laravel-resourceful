@@ -20,18 +20,25 @@
         }
     ],
     "require": {
-        "php": ">=8.0",
+        "php": "^8.1 || ^8.2",
         "ext-json": "*",
-        "laravel/framework": "^8.12 || ^9.0 || ^10.0"
+        "laravel/framework": "^9.0 || ^10.0"
     },
     "require-dev": {
-        "orchestra/testbench": "^6.0 || ^7.0 || ^8.0",
-        "tmarsteel/mockery-callable-mock": "~2.1"
+        "orchestra/testbench": "^7.0 || ^8.0",
+        "tmarsteel/mockery-callable-mock": "~2.1",
+        "netsells/code-standards-laravel": "^1.1"
     },
     "autoload": {
         "psr-4": {
             "Netsells\\Http\\Resources\\": "src/",
             "Netsells\\Http\\Resources\\Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "phpstan": "vendor/bin/phpstan",
+        "lint": "vendor/bin/php-cs-fixer fix --dry-run --diff",
+        "format": "vendor/bin/php-cs-fixer fix",
+        "test": "vendor/bin/phpunit"
     }
 }

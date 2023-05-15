@@ -8,11 +8,11 @@ use Illuminate\Support\Collection;
 class Load extends EloquentDeferredValue
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected static function loadEloquentRelations(array $deferredValues): void
     {
-        collect($deferredValues)->groupBy('relations')
+        Collection::make($deferredValues)->groupBy('relations')
             ->each(function (Collection $collection, $relation) {
                 EloquentCollection::make($collection->pluck('resource.resource'))
                     ->load($relation);
