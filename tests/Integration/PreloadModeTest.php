@@ -8,7 +8,7 @@ use Netsells\Http\Resources\Tests\Integration\Resources\PreloadMode\BookWithSing
 
 class PreloadModeTest extends TestCase
 {
-    public function testPreloadLoadsSingleRelationOnResource()
+    public function test_preload_loads_single_relation_on_resource()
     {
         /** @var Book $book */
         $book = Book::factory()->forAuthor()->create()->fresh();
@@ -18,7 +18,7 @@ class PreloadModeTest extends TestCase
         $this->assertTrue($book->relationLoaded('author'));
     }
 
-    public function testPreloadLoadsMultipleRelationsOnResource()
+    public function test_preload_loads_multiple_relations_on_resource()
     {
         /** @var Book $book */
         $book = Book::factory()->forAuthor()->create()->fresh();
@@ -29,7 +29,7 @@ class PreloadModeTest extends TestCase
         $this->assertTrue($book->relationLoaded('genres'));
     }
 
-    public function testPreloadLoadsSingleRelationOnResourceCollection()
+    public function test_preload_loads_single_relation_on_resource_collection()
     {
         /** @var Book[] $books */
         $books = Book::factory()->count(3)->forAuthor()->create()->fresh();
@@ -41,7 +41,7 @@ class PreloadModeTest extends TestCase
         }
     }
 
-    public function testPreloadLoadsMultipleRelationsOnResourceCollection()
+    public function test_preload_loads_multiple_relations_on_resource_collection()
     {
         /** @var Book[] $books */
         $books = Book::factory()->count(3)->forAuthor()->create()->fresh();
