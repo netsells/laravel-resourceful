@@ -11,7 +11,7 @@ use Netsells\Http\Resources\Tests\Integration\Resources\UseMode\BookWithSingleRe
 
 class UseModeTest extends TestCase
 {
-    public function testUseLoadsAndProvidesSingleRelation()
+    public function test_use_loads_and_provides_single_relation()
     {
         /** @var Book $book */
         $book = Book::factory()->forAuthor()->create()->fresh();
@@ -25,7 +25,7 @@ class UseModeTest extends TestCase
             ->response();
     }
 
-    public function testUseLoadsAndProvidesMultipleRelations()
+    public function test_use_loads_and_provides_multiple_relations()
     {
         /** @var Book $book */
         $book = Book::factory()->forAuthor()->create()->fresh();
@@ -40,7 +40,7 @@ class UseModeTest extends TestCase
             ->response();
     }
 
-    public function testUseSkipsMissingValue()
+    public function test_use_skips_missing_value()
     {
         /** @var Book $book */
         $book = Book::factory()->forAuthor()->create()->fresh();

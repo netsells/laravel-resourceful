@@ -16,7 +16,7 @@ abstract class ResourceTestCase extends TestCase
     /**
      * @dataProvider resourceProvider
      */
-    public function testSuperReducesQueriesOverBasicResourceAndBothMatch(string $basicClass, string $superClass)
+    public function test_super_reduces_queries_over_basic_resource_and_both_match(string $basicClass, string $superClass)
     {
         /** @var Model $model */
         $model = $this->produce(1)->fresh();
@@ -35,7 +35,7 @@ abstract class ResourceTestCase extends TestCase
     /**
      * @dataProvider resourceProvider
      */
-    public function testSuperReducesQueriesOverBasicResourceCollectionAndBothMatch(string $basicClass, string $superClass)
+    public function test_super_reduces_queries_over_basic_resource_collection_and_both_match(string $basicClass, string $superClass)
     {
         /** @var Collection $models */
         $models = $this->produce($this->collectionSize)->fresh();

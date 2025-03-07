@@ -23,7 +23,7 @@ class OptimalNumberOfQueriesTest extends TestCase
     /**
      * @dataProvider resourceProvider
      */
-    public function testCreatesAsManyQueriesAsEagerLoadingResourceCollection(string $basicClass, string $superClass)
+    public function test_creates_as_many_queries_as_eager_loading_resource_collection(string $basicClass, string $superClass)
     {
         $this->fullLibraryFactory()->create();
 
@@ -55,7 +55,7 @@ class OptimalNumberOfQueriesTest extends TestCase
     /**
      * @dataProvider resourceProvider
      */
-    public function testCreatesAsManyQueriesAsLazyEagerLoadingResourceCollection(string $basicClass, string $superClass)
+    public function test_creates_as_many_queries_as_lazy_eager_loading_resource_collection(string $basicClass, string $superClass)
     {
         $this->fullLibraryFactory()->create();
 
@@ -81,7 +81,7 @@ class OptimalNumberOfQueriesTest extends TestCase
     /**
      * @dataProvider resourceProvider
      */
-    public function testCreatesAsManyQueriesAsEagerLoadingResource(string $basicClass, string $superClass)
+    public function test_creates_as_many_queries_as_eager_loading_resource(string $basicClass, string $superClass)
     {
         $this->fullLibraryFactory()->create();
 
@@ -113,7 +113,7 @@ class OptimalNumberOfQueriesTest extends TestCase
     /**
      * @dataProvider resourceProvider
      */
-    public function testCreatesAsManyQueriesAsLazyEagerLoadingResource(string $basicClass, string $superClass)
+    public function test_creates_as_many_queries_as_lazy_eager_loading_resource(string $basicClass, string $superClass)
     {
         $this->fullLibraryFactory()->create();
 
